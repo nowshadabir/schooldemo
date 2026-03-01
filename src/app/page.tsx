@@ -18,13 +18,19 @@ import {
   Clock,
   ArrowUpRight
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 const MotionNumber = ({ value, label }: { value: string, label: string }) => {
   return (
-    <div className="flex flex-col items-center lg:items-start space-y-1">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="flex flex-col items-center lg:items-start space-y-1"
+    >
       <span className="text-4xl lg:text-5xl font-black text-zinc-950 tracking-tighter">{value}</span>
       <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">{label}</span>
-    </div>
+    </motion.div>
   );
 };
 
@@ -33,54 +39,114 @@ export default function Home() {
     <div className="flex min-h-screen flex-col font-sans selection:bg-primary selection:text-white bg-white">
       <Navbar />
 
-      {/* Notice Ticker */}
-      <div className="bg-zinc-100 border-b border-zinc-200 py-2 relative overflow-hidden flex items-center group">
-        <div className="flex items-center gap-4 bg-zinc-950 text-white text-[10px] font-black uppercase tracking-[0.2em] px-5 py-2 z-10 whitespace-nowrap ml-6 shadow-lg shadow-black/10 transition-transform">
-          <Bell className="w-3.5 h-3.5 fill-current brightness-200" />
-          Important Updates
-        </div>
-        <div className="flex-1 overflow-hidden pointer-events-none pr-6">
-          <div className="animate-marquee whitespace-nowrap text-sm font-bold tracking-tight text-zinc-600">
-            <span className="mx-8">• Admission for 2026 Academic Session is officially OPEN! Apply by March 30th.</span>
-            <span className="mx-8">• The Annual Cultural Fest "Rhythm 2026" starts from April 15th.</span>
-            <span className="mx-8">• Result of Terminal Examination 2025 has been published. Check your portal.</span>
+      {/* Premium Notice Ticker */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="relative bg-zinc-50 border-b border-zinc-100 py-2.5 overflow-hidden flex items-center"
+      >
+        {/* Background Accent */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent pointer-events-none"></div>
+
+        <div className="container mx-auto px-6 flex items-center">
+          {/* Label Badge */}
+          <div className="flex items-center gap-3 bg-white border border-zinc-200 px-4 py-1.5 rounded-full z-10 shadow-sm shrink-0 mr-6">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-950 flex items-center gap-2">
+              <Bell className="w-3 h-3 text-primary" />
+              Notices
+            </span>
+          </div>
+
+          {/* Marquee Content */}
+          <div className="flex-1 overflow-hidden">
+            <div className="animate-marquee-fast md:animate-marquee whitespace-nowrap flex items-center py-1">
+              {[
+                "Admission for 2026 Academic Session is officially OPEN! Apply by March 30th.",
+                "The Annual Cultural Fest 'Rhythm 2026' starts from April 15th.",
+                "Result of Terminal Examination 2025 has been published. Check your portal.",
+                "New STEM Research Lab to be inaugurated by the Ministry of Education next week."
+              ].map((text, i) => (
+                <div key={i} className="inline-flex items-center mx-8 group cursor-pointer">
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 mr-4 group-hover:bg-primary transition-colors"></span>
+                  <span className="text-sm font-bold text-zinc-600 group-hover:text-zinc-950 transition-colors tracking-tight">
+                    {text}
+                  </span>
+                  <ArrowUpRight className="w-3 h-3 ml-2 text-zinc-400 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       <main className="flex-1">
         {/* Academic Hero Section */}
-        <section className="relative pt-8 pb-32 overflow-hidden bg-white border-b border-zinc-100">
+        <section className="relative pt-12 md:pt-16 lg:pt-8 pb-20 md:pb-24 lg:pb-32 overflow-hidden bg-white border-b border-zinc-100">
           <div className="container mx-auto px-6 relative z-10">
-            <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
               {/* Left Content - Institutional Authority */}
-              <div className="space-y-8">
-                <div className="inline-flex items-center gap-3 px-3 py-1.5 bg-zinc-50 border border-zinc-200 rounded-lg">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="space-y-8"
+              >
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="inline-flex items-center gap-3 px-3 py-1.5 bg-zinc-50 border border-zinc-200 rounded-lg"
+                >
                   <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">2026 Admissions Now Open</span>
-                </div>
+                </motion.div>
 
                 <div className="space-y-6">
-                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-zinc-950 tracking-tight leading-[1.05]">
-                    Pioneering Excellence <br />
+                  <motion.h1
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.8 }}
+                    className="text-4xl md:text-6xl lg:text-7xl font-black text-zinc-950 tracking-tight leading-[1.1] md:leading-[1.05]"
+                  >
+                    Pioneering Excellence <br className="hidden sm:block" />
                     <span className="text-primary italic">In Global Education</span>
-                  </h1>
-                  <p className="text-lg text-zinc-600 font-medium max-w-xl leading-relaxed">
+                  </motion.h1>
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4, duration: 0.8 }}
+                    className="text-lg text-zinc-600 font-medium max-w-xl leading-relaxed"
+                  >
                     With a legacy of three decades, SchoolDemo Institute provides a rigorous academic environment paired with world-class facilities to nurture the leaders of tomorrow.
-                  </p>
+                  </motion.p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                  className="flex flex-col sm:flex-row gap-4"
+                >
                   <Button className="h-14 px-8 rounded-xl text-md font-bold shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all">
                     Apply for Admission
                   </Button>
                   <Button variant="outline" className="h-14 px-8 rounded-xl text-md font-bold border-zinc-200 hover:bg-zinc-50 transition-all">
                     Download Prospectus
                   </Button>
-                </div>
+                </motion.div>
 
                 {/* Formal Trust Metrics */}
-                <div className="pt-8 border-t border-zinc-100 flex items-center gap-12">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.8 }}
+                  className="pt-8 border-t border-zinc-100 flex flex-wrap items-center gap-8 md:gap-12"
+                >
                   <div className="space-y-1">
                     <div className="text-2xl font-black text-zinc-950">99.2%</div>
                     <div className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Academic Success</div>
@@ -95,11 +161,16 @@ export default function Home() {
                     <div className="text-2xl font-black text-zinc-950">12k+</div>
                     <div className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Global Alumni</div>
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
 
               {/* Right Content - Modern Information Panel */}
-              <div className="relative">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                className="relative"
+              >
                 <div className="grid grid-cols-2 gap-4 relative z-10">
                   {/* Hero Image Focus */}
                   <div className="col-span-2 relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-zinc-100">
@@ -139,18 +210,24 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
         {/* Principal's Institutional Address - Redesigned for Professionalism */}
-        <section className="py-32 bg-white relative overflow-hidden">
+        <motion.section
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="py-20 md:py-32 bg-white relative overflow-hidden"
+        >
           {/* Decorative background elements */}
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-zinc-50/50 -skew-x-12 translate-x-32 pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-zinc-50/50 -skew-x-12 translate-x-32 pointer-events-none hidden lg:block"></div>
 
           <div className="container mx-auto px-6 relative">
-            <div className="grid lg:grid-cols-12 gap-16 items-center">
+            <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
               {/* Left Column - Image & Branding (5 cols) */}
               <div className="lg:col-span-12 xl:col-span-5 relative">
                 <div className="relative group">
@@ -218,15 +295,21 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
 
         {/* Why Choose Us Grid */}
-        <section className="py-24 bg-zinc-50/50 border-y border-zinc-100">
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1 }}
+          className="py-24 bg-zinc-50/50 border-y border-zinc-100"
+        >
           <div className="container mx-auto px-6">
-            <div className="text-center max-w-3xl mx-auto space-y-4 mb-20">
+            <div className="text-center max-w-3xl mx-auto space-y-4 mb-12 md:mb-20">
               <h4 className="text-primary font-black uppercase tracking-[0.4em] text-[10px]">Why SchoolDemo</h4>
-              <h2 className="text-4xl md:text-5xl font-black text-zinc-900 tracking-tighter leading-tight">
+              <h2 className="text-3xl md:text-5xl font-black text-zinc-900 tracking-tighter leading-tight">
                 Designed for Absolute <span className="italic underline decoration-primary/30">Excellence</span>
               </h2>
               <p className="text-zinc-500 font-medium text-lg">
@@ -267,7 +350,14 @@ export default function Home() {
                   icon: CheckCircle2
                 }
               ].map((item, i) => (
-                <div key={i} className="group bg-white p-10 rounded-[2rem] border border-zinc-100 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300">
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  className="group bg-white p-10 rounded-[2rem] border border-zinc-100 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300"
+                >
                   <div className="w-14 h-14 bg-zinc-50 rounded-2xl flex items-center justify-center text-zinc-950 mb-8 border border-zinc-100 group-hover:bg-primary group-hover:text-white transition-colors duration-500">
                     <item.icon className="w-6 h-6" />
                   </div>
@@ -275,16 +365,16 @@ export default function Home() {
                   <p className="text-zinc-500 font-medium leading-relaxed group-hover:text-zinc-600 transition-colors">
                     {item.desc}
                   </p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
       </main>
 
       {/* Footer */}
-      <footer className="bg-zinc-950 text-white pt-24 pb-12 px-6">
-        <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
+      <footer className="bg-zinc-950 text-white pt-16 md:pt-24 pb-12 px-6">
+        <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16">
           <div className="space-y-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">

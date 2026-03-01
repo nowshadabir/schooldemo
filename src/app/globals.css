@@ -47,6 +47,7 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee-fast: marquee 15s linear infinite;
   --animate-bounce-slow: bounce-slow 4s ease-in-out infinite;
   --animate-pulse-slow: pulse-slow 8s ease-in-out infinite;
 

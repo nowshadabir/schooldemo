@@ -48,8 +48,63 @@ const ListItem = React.forwardRef<
 ListItem.displayName = "ListItem";
 
 export const Navbar = () => {
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [activeAccordion, setActiveAccordion] = React.useState<string | null>(null);
+
+    const toggleMenu = () => {
+        setIsOpen(!isOpen);
+        if (isOpen) setActiveAccordion(null);
+    };
+
+    const toggleAccordion = (title: string) => {
+        setActiveAccordion(activeAccordion === title ? null : title);
+    };
+
+    const navLinks = [
+        { title: "Home", href: "/" },
+        {
+            title: "About",
+            href: "#",
+            subItems: [
+                { title: "Principal's Welcome", href: "#" },
+                { title: "Vision & Mission", href: "#" },
+                { title: "Governing Board", href: "#" },
+            ]
+        },
+        {
+            title: "Academic",
+            href: "#",
+            subItems: [
+                { title: "Our Programs", href: "#" },
+                { title: "Academic Calendar", href: "#" },
+                { title: "Syllabus & Curriculum", href: "#" },
+                { title: "Faculty Directory", href: "#" },
+            ]
+        },
+        {
+            title: "Admission",
+            href: "#",
+            subItems: [
+                { title: "Admission Process", href: "#" },
+                { title: "Tuition & Fees", href: "#" },
+                { title: "Scholarships", href: "#" },
+                { title: "Apply Now", href: "#" },
+            ]
+        },
+        {
+            title: "Campus",
+            href: "#",
+            subItems: [
+                { title: "Facilities", href: "#" },
+                { title: "Photo Gallery", href: "#" },
+                { title: "Extra Curricular", href: "#" },
+                { title: "Contact Us", href: "#" },
+            ]
+        },
+    ];
+
     return (
-        <header className="w-full flex flex-col">
+        <header className="w-full flex flex-col relative">
             {/* Top Bar */}
             <div className="bg-zinc-950 text-zinc-400 py-2.5 px-6 hidden md:flex items-center justify-between text-[11px] font-bold tracking-widest uppercase border-b border-white/5">
                 <div className="flex items-center gap-8">
@@ -78,12 +133,12 @@ export const Navbar = () => {
             {/* Main Nav Overlay */}
             <nav className="flex items-center justify-between px-6 py-4 bg-white sticky top-0 z-50 shadow-sm border-b">
                 <Link href="/" className="flex items-center gap-3 group shrink-0">
-                    <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-primary-foreground shadow-2xl shadow-primary/30 transition-transform group-hover:scale-110">
-                        <GraduationCap className="w-7 h-7" />
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-xl flex items-center justify-center text-primary-foreground shadow-2xl shadow-primary/30 transition-transform group-hover:scale-110">
+                        <GraduationCap className="w-6 h-6 md:w-7 md:h-7" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-2xl font-black tracking-tighter leading-none text-zinc-950">SCHOOL<span className="text-primary italic">DEMO</span></span>
-                        <span className="text-[10px] font-black tracking-[0.3em] text-zinc-400 mt-1 uppercase">Academic excellence</span>
+                        <span className="text-xl md:text-2xl font-black tracking-tighter leading-none text-zinc-950">SCHOOL<span className="text-primary italic">DEMO</span></span>
+                        <span className="text-[8px] md:text-[10px] font-black tracking-[0.3em] text-zinc-400 mt-1 uppercase">Academic excellence</span>
                     </div>
                 </Link>
 
@@ -169,15 +224,102 @@ export const Navbar = () => {
                         <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Inquiry Line</span>
                         <span className="text-sm font-bold text-zinc-950">+880 123 456 78</span>
                     </div>
-                    <Button className="rounded-xl px-6 h-11 font-bold shadow-xl shadow-primary/20 group">
+                    <Button className="hidden sm:flex rounded-xl px-6 h-11 font-bold shadow-xl shadow-primary/20 group">
                         Apply Now
                         <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
                     </Button>
-                    <Button variant="ghost" size="icon" className="xl:hidden">
+                    <Button variant="ghost" size="icon" className="xl:hidden" onClick={toggleMenu}>
                         <Menu className="w-6 h-6" />
                     </Button>
                 </div>
             </nav>
+
+            {/* Mobile Menu Overlay */}
+            <div className={cn(
+                "fixed inset-0 z-[100] bg-white transition-transform duration-500 xl:hidden overflow-y-auto",
+                isOpen ? "translate-x-0" : "translate-x-full"
+            )}>
+                <div className="p-6 min-h-full flex flex-col">
+                    <div className="flex items-center justify-between mb-12">
+                        <Link href="/" className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground">
+                                <GraduationCap className="w-6 h-6" />
+                            </div>
+                            <span className="text-xl font-black tracking-tighter text-zinc-950 uppercase">School<span className="text-primary italic">Demo</span></span>
+                        </Link>
+                        <Button variant="ghost" size="icon" onClick={toggleMenu}>
+                            <Menu className="w-6 h-6 rotate-90" />
+                        </Button>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                        {navLinks.map((link) => (
+                            <div key={link.title} className="flex flex-col">
+                                {link.subItems ? (
+                                    <button
+                                        onClick={() => toggleAccordion(link.title)}
+                                        className="flex items-center justify-between py-4 text-2xl font-black text-zinc-900 tracking-tight group"
+                                    >
+                                        <span className={cn(activeAccordion === link.title && "text-primary")}>{link.title}</span>
+                                        <ChevronDown className={cn(
+                                            "w-6 h-6 transition-transform duration-300",
+                                            activeAccordion === link.title ? "rotate-180 text-primary" : "text-zinc-300"
+                                        )} />
+                                    </button>
+                                ) : (
+                                    <Link
+                                        href={link.href}
+                                        className="py-4 text-2xl font-black text-zinc-900 tracking-tight hover:text-primary transition-colors"
+                                        onClick={toggleMenu}
+                                    >
+                                        {link.title}
+                                    </Link>
+                                )}
+
+                                {link.subItems && (
+                                    <div className={cn(
+                                        "overflow-hidden transition-all duration-300",
+                                        activeAccordion === link.title ? "max-h-[400px] opacity-100 mb-4" : "max-h-0 opacity-0"
+                                    )}>
+                                        <div className="flex flex-col gap-4 pl-4 border-l-2 border-zinc-100 mt-2">
+                                            {link.subItems.map((item) => (
+                                                <Link
+                                                    key={item.title}
+                                                    href={item.href}
+                                                    className="text-md font-bold text-zinc-500 hover:text-primary transition-colors py-1"
+                                                    onClick={toggleMenu}
+                                                >
+                                                    {item.title}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-auto pt-12">
+                        <Button className="w-full h-14 rounded-2xl text-lg font-bold shadow-xl shadow-primary/20 shadow-blue-500/10">
+                            Apply for Admission
+                        </Button>
+                        <div className="mt-8 space-y-4 pb-8">
+                            <div className="flex items-center gap-3 text-zinc-500 font-bold text-sm">
+                                <div className="w-8 h-8 rounded-full bg-zinc-50 flex items-center justify-center">
+                                    <Phone className="w-3.5 h-3.5 text-primary" />
+                                </div>
+                                <span>+880 1234 567 890</span>
+                            </div>
+                            <div className="flex items-center gap-3 text-zinc-500 font-bold text-sm">
+                                <div className="w-8 h-8 rounded-full bg-zinc-50 flex items-center justify-center">
+                                    <Mail className="w-3.5 h-3.5 text-primary" />
+                                </div>
+                                <span>info@schooldemo.edu</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </header>
     );
 };
