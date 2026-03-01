@@ -67,7 +67,7 @@ export const Navbar = () => {
                     <div className="w-px h-3 bg-zinc-800"></div>
                     <Link href="#" className="hover:text-white transition-colors">Career</Link>
                     <div className="w-px h-3 bg-zinc-800"></div>
-                    <Link href="#" className="hover:text-white transition-colors text-primary">Student Login</Link>
+                    <Link href="#" className="hover:text-white transition-colors">Student Login</Link>
                     <div className="w-px h-3 bg-zinc-800"></div>
                     <Link href="#" className="hover:text-white transition-colors">Teacher Login</Link>
                     <div className="w-px h-3 bg-zinc-800"></div>
